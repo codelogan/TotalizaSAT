@@ -1,10 +1,11 @@
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\bin\Debug\Totaliza.exe.config
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\bin\Debug\Totaliza.exe
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\bin\Debug\Totaliza.pdb
-C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.csprojResolveAssemblyReference.cache
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.Principal.resources
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.Properties.Resources.resources
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.csproj.GenerateResource.Cache
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.exe
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.pdb
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.csproj.CoreCompileInputs.cache
+C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.csprojAssemblyReference.cache
+C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.csproj.ResolveComReference.cache
