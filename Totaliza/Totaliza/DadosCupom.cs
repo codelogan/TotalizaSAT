@@ -61,6 +61,7 @@ namespace Totaliza
                 }
             return total;
         }
+
         public static decimal Soma(Hashtable hashtableCupons)
         {
             decimal total = 0;

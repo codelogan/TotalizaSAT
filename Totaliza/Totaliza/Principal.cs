@@ -20,6 +20,8 @@ namespace Totaliza
     public partial class Principal : Form
     {
         public List<DadosCupom> SortedList;
+        public List<DadosCupom> ListaCuponsExibicao = new List<DadosCupom>();
+
         string Pasta;
 
         public Principal()
@@ -29,8 +31,6 @@ namespace Totaliza
 
         private void AbrePasta_Click(object sender, EventArgs e)
         {
-
-            
             string valor = "0";
             string dtemissao = "";
             string hremissao = "";
@@ -66,17 +66,14 @@ namespace Totaliza
                 Pasta = Path.GetDirectoryName(ofd1.FileName);
                 DirectoryInfo Dir = new DirectoryInfo(Pasta);
                 FileInfo[] Files = Dir.GetFiles("*", SearchOption.AllDirectories).OrderBy(p => p.CreationTimeUtc).ToArray();
-                //Array.Sort(Files, (x, y) => Comparer<DateTime>.Default.Compare(x.CreationTime, y.CreationTime));
                 txtCaminhoXML.Text = Pasta.ToString();
                 // Le os arquivos selecionados 
                 foreach (FileInfo File in Files)
                 {
-                    //txtArquivo.Text += arquivo;
                     // cria um PictureBox
                     try
                     {
                         XmlTextReader reader = new XmlTextReader(File.FullName);
-                        //ArrayList elementos = new ArrayList();
                         valor = "0";
                         dtemissao = "";
                         hremissao = "";
@@ -87,10 +84,8 @@ namespace Totaliza
                         varNumeroCupom = 0;
                         varId = "";
                         varChCanc = "";
-
                         while ((reader.Read()))
                         {
-
                             if (reader.NodeType == XmlNodeType.Element)
                             {
                                 switch (reader.Name)
@@ -120,21 +115,16 @@ namespace Totaliza
                         varNumeroCupom = Convert.ToInt32(numerocupom);
                         varId = Convert.ToString(id);
                         varChCanc = Convert.ToString(chcanc);
-                        //lCupons.Add(new DadosCupom(varNumeroCupom, varData, varValor, varId, varChCanc));
                         if (varChCanc.Length > 0)
                         {
                             if (hashtableCupons.ContainsKey(varChCanc))
                             {
-                                //hashtableCupons[varChCanc] = new DadosCupom(varNumeroCupom, varData, varValor, varId, varChCanc);
                                 ((DadosCupom)hashtableCupons[varChCanc]).chcanc = varId;
-
                             }
                             else
                             {
-                                //hashtableCupons.Add(varId, new DadosCupom(varNumeroCupom, varData, varValor, varId, varChCanc));
                                 hashtableCupons.Add(varId, new DadosCupom(0, varData, 0, varChCanc, varId));
                             }
-
                         }
                         else
                         {
@@ -149,7 +139,6 @@ namespace Totaliza
                                 hashtableCupons.Add(varId, new DadosCupom(varNumeroCupom, varData, varValor, varId, varChCanc));
                             }
                         }
-
                     }
                     catch (SecurityException ex)
                     {
@@ -165,38 +154,23 @@ namespace Totaliza
                                                    " ele pode estar corrompido.\n\nErro reportado : " + ex.Message);
                     }
                 }
-                //LblTotal.Text = Convert.ToString(lCupons.Sum(item => item.Valor));
                 LblTotal.Text = "Total: " + Convert.ToString(DadosCupom.Soma(hashtableCupons));
-
-
-
-
 
                 List<DadosCupom> hashToList = new List<DadosCupom>();
                 foreach (DictionaryEntry de in hashtableCupons)
                 {
                     hashToList.Add((DadosCupom)de.Value);
                 }
+
                 //Teoricamente ordenar aqui
-                //List<DadosCupom> SortedList = hashToList.OrderBy(o => o.Data).ToList();
                 SortedList = hashToList.OrderBy(o => o.Data).ToList();
-                var bindingList = new BindingList<DadosCupom>(SortedList);
-                var source1 = new BindingSource(bindingList, null);
-                dgvHashCupons.DataSource = source1;
-                dgvHashCupons.AutoResizeColumns();
+                foreach (DadosCupom d in SortedList)
+                    ListaCuponsExibicao.Add(d);
 
-                DataGridViewColumnCollection c = dgvHashCupons.Columns;
 
-                c[0].HeaderText = "N. Cupom";
-                c[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                c[1].HeaderText = "Data hora";
-                c[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                c[2].HeaderText = "Valor";
-                c[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                c[3].HeaderText = "Chave de acesso";
-                c[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                c[4].HeaderText = "Chave de acesso cancelamento";
-                c[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                FiltraListaCupons();
+
+                CarregaGradeCupons();
             }
         }
 
@@ -209,6 +183,7 @@ namespace Totaliza
         {
 
         }
+
         public void Exportar()
         {
             decimal total = 0;
@@ -230,7 +205,6 @@ namespace Totaliza
             xlWorkBook = xlApp.Workbooks.Add(Type.Missing);
             xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
 
-            //xlWorkSheet.Range[xlWorkSheet.Cells[linha, 1], xlWorkSheet.Cells[linha, 7]].Style.Locked = false;
             //Redimensionando coluna de nome do grupo
             ((Excel.Range)xlWorkSheet.Cells[linha, 1]).EntireColumn.ColumnWidth = 20;
             ((Excel.Range)xlWorkSheet.Cells[linha, 2]).EntireColumn.ColumnWidth = 15;
@@ -250,11 +224,7 @@ namespace Totaliza
             xlWorkSheet.Cells[linha, 5] = "Chave de cancelamento";
             linha++;
 
-            
-
-            //List<DadosCupom> lProdutos = Produto.CarregaDadosProduto();
-
-            foreach (DadosCupom dc in SortedList)
+            foreach (DadosCupom dc in ListaCuponsExibicao)
             {
                 xlWorkSheet.Cells[linha, 1] = dc.Data;
                 xlWorkSheet.Cells[linha, 2] = dc.Numero;
@@ -272,14 +242,16 @@ namespace Totaliza
             xlWorkSheet.Cells[linha, 2] = "Total";
             xlWorkSheet.Cells[linha, 3] = total.ToString("0.00");
             xlApp.ActiveWindow.SplitRow = 1;
-            //xlApp.ActiveWindow.SplitColumn = 1;
             xlApp.ActiveWindow.FreezePanes = true;
 
-            //xlWorkSheet.Protect(Type.Missing, xlWorkSheet.ProtectDrawingObjects,  true, xlWorkSheet.ProtectScenarios, xlWorkSheet.ProtectionMode,  xlWorkSheet.Protection.AllowFormattingCells,  xlWorkSheet.Protection.AllowFormattingColumns,  xlWorkSheet.Protection.AllowFormattingRows,  xlWorkSheet.Protection.AllowInsertingColumns,  xlWorkSheet.Protection.AllowInsertingRows,  xlWorkSheet.Protection.AllowInsertingHyperlinks,  xlWorkSheet.Protection.AllowDeletingColumns,  xlWorkSheet.Protection.AllowDeletingRows,  xlWorkSheet.Protection.AllowSorting,  xlWorkSheet.Protection.AllowFiltering,  xlWorkSheet.Protection.AllowUsingPivotTables);
-            //xlWorkSheet.EnableSelection = Excel.XlEnableSelection.xlUnlockedCells;
-            //xlWorkSheet.Protect(Password: "luol2007", AllowFormattingCells: false);
             xlWorkSheet.Protect("luol2007", true, true);
-            xlWorkBook.SaveAs(Pasta + "\\CuponsSAT.xlsx");
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Title = "Salvar arquivo";
+            saveFileDialog.FileName = "CuponsSAT.xlsx";
+            saveFileDialog.ShowDialog();
+            xlWorkBook.SaveAs(saveFileDialog.FileName);
+
             xlWorkBook.Close(true, Type.Missing, Type.Missing);
             xlApp.Quit();
             //Interop marshaling governs how data is passed in method arguments and return values between managed 
@@ -291,12 +263,78 @@ namespace Totaliza
             Marshal.ReleaseComObject(xlApp);
             lblMostrar.Text = "Exportação dos dados concluida!";
             MessageBox.Show("Exportação dos dados concluida!", "Aviso");
-         
         }
-
         private void btnExportar_Click(object sender, EventArgs e)
         {
             Exportar();
+        }
+
+        private bool ValidaIntervaloData()
+        {
+            if (dtpInicioPeriodo.Value > dtpFimPeriodo.Value)
+            {
+                MessageBox.Show("A data de início deve ser menor que a data final!", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+            return true;
+        }
+
+        private void CarregaGradeCupons()
+        {
+            var bindingList = new BindingList<DadosCupom>(ListaCuponsExibicao);
+            var source1 = new BindingSource(bindingList, null);
+            dgvHashCupons.DataSource = source1;
+            dgvHashCupons.AutoResizeColumns();
+
+            DataGridViewColumnCollection c = dgvHashCupons.Columns;
+
+            c[0].HeaderText = "N. Cupom";
+            c[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            c[1].HeaderText = "Data hora";
+            c[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            c[2].HeaderText = "Valor";
+            c[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            c[3].HeaderText = "Chave de acesso";
+            c[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            c[4].HeaderText = "Chave de acesso cancelamento";
+            c[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            TotalizaCupons();
+        }
+
+        private void FiltraListaCupons()
+        {
+            CultureInfo MyCultureInfo = new CultureInfo("pt-BR");
+            string ini = dtpInicioPeriodo.Value.ToShortDateString() + " 00:00:00";
+            string fim = dtpFimPeriodo.Value.ToShortDateString() + " 23:59:59";
+            DateTime inicioPeriodo = DateTime.Parse(ini, MyCultureInfo);
+            DateTime fimPeriodo = DateTime.Parse(fim, MyCultureInfo);
+
+            ListaCuponsExibicao = SortedList.FindAll(a => a.Data >= inicioPeriodo && a.Data <= fimPeriodo);
+        }
+
+        private void dtpInicioPeriodo_ValueChanged(object sender, EventArgs e)
+        {
+            if (ValidaIntervaloData())
+            {
+                FiltraListaCupons();
+                CarregaGradeCupons();
+            }
+        }
+
+        private void dtpFimPeriodo_ValueChanged(object sender, EventArgs e)
+        {
+            if (ValidaIntervaloData())
+            {
+                FiltraListaCupons();
+                CarregaGradeCupons();
+            }
+        }
+
+        private void TotalizaCupons()
+        {
+            LblTotal.Text = "Total: " + Convert.ToString(DadosCupom.SomaLista(ListaCuponsExibicao));
         }
     }
 }
