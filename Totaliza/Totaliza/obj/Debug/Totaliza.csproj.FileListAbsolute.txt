@@ -9,3 +9,14 @@ C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Tot
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.csproj.CoreCompileInputs.cache
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.csprojAssemblyReference.cache
 C:\Sourcesvn\Sistemas\Production\CSharp\Totaliza\Totaliza\Totaliza\obj\Debug\Totaliza.csproj.ResolveComReference.cache
+C:\git\TotalizaSAT\Totaliza\Totaliza\bin\Debug\Totaliza.exe.config
+C:\git\TotalizaSAT\Totaliza\Totaliza\bin\Debug\Totaliza.exe
+C:\git\TotalizaSAT\Totaliza\Totaliza\bin\Debug\Totaliza.pdb
+C:\git\TotalizaSAT\Totaliza\Totaliza\obj\Debug\Totaliza.csprojAssemblyReference.cache
+C:\git\TotalizaSAT\Totaliza\Totaliza\obj\Debug\Totaliza.csproj.ResolveComReference.cache
+C:\git\TotalizaSAT\Totaliza\Totaliza\obj\Debug\Totaliza.Principal.resources
+C:\git\TotalizaSAT\Totaliza\Totaliza\obj\Debug\Totaliza.Properties.Resources.resources
+C:\git\TotalizaSAT\Totaliza\Totaliza\obj\Debug\Totaliza.csproj.GenerateResource.cache
+C:\git\TotalizaSAT\Totaliza\Totaliza\obj\Debug\Totaliza.csproj.CoreCompileInputs.cache
+C:\git\TotalizaSAT\Totaliza\Totaliza\obj\Debug\Totaliza.exe
+C:\git\TotalizaSAT\Totaliza\Totaliza\obj\Debug\Totaliza.pdb
