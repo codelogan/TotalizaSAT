@@ -37,11 +37,14 @@ namespace Totaliza
             string numerocupom = "0";
             string id = "";
             string chcanc = "";
+            string valorICMS = "0";
             System.DateTime varData;
             decimal varValor;
             int varNumeroCupom;
             string varId;
             string varChCanc;
+            decimal varValorICMS;
+            
 
             List<DadosCupom> lCupons = new List<DadosCupom>();
             Hashtable hashtableCupons = new Hashtable();
@@ -80,10 +83,12 @@ namespace Totaliza
                         numerocupom = "0";
                         id = "";
                         chcanc = "";
+                        valorICMS = "0";
                         varValor = 0;
                         varNumeroCupom = 0;
                         varId = "";
                         varChCanc = "";
+                        varValorICMS = 0;
                         while ((reader.Read()))
                         {
                             if (reader.NodeType == XmlNodeType.Element)
@@ -106,6 +111,9 @@ namespace Totaliza
                                         id = reader.GetAttribute("Id");
                                         chcanc = reader.GetAttribute("chCanc") ?? "";
                                         break;
+                                    case "vICMS":
+                                        valorICMS = reader.ReadString();
+                                        break;
                                 }
                             }
                         }
@@ -115,6 +123,7 @@ namespace Totaliza
                         varNumeroCupom = Convert.ToInt32(numerocupom);
                         varId = Convert.ToString(id);
                         varChCanc = Convert.ToString(chcanc);
+                        varValorICMS = Convert.ToDecimal(valorICMS, new CultureInfo("en-US"));
                         if (varChCanc.Length > 0)
                         {
                             if (hashtableCupons.ContainsKey(varChCanc))
@@ -123,7 +132,7 @@ namespace Totaliza
                             }
                             else
                             {
-                                hashtableCupons.Add(varId, new DadosCupom(0, varData, 0, varChCanc, varId));
+                                hashtableCupons.Add(varId, new DadosCupom(0, varData, 0, varChCanc, varId,0));
                             }
                         }
                         else
@@ -133,10 +142,11 @@ namespace Totaliza
                                 ((DadosCupom)hashtableCupons[varId]).Numero = varNumeroCupom;
                                 ((DadosCupom)hashtableCupons[varId]).Data = varData;
                                 ((DadosCupom)hashtableCupons[varId]).Valor = varValor;
+                                ((DadosCupom)hashtableCupons[varId]).ValorICMS = varValorICMS;
                             }
                             else
                             {
-                                hashtableCupons.Add(varId, new DadosCupom(varNumeroCupom, varData, varValor, varId, varChCanc));
+                                hashtableCupons.Add(varId, new DadosCupom(varNumeroCupom, varData, varValor, varId, varChCanc, varValorICMS));
                             }
                         }
                     }
@@ -299,6 +309,8 @@ namespace Totaliza
             c[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             c[4].HeaderText = "Chave de acesso cancelamento";
             c[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            c[5].HeaderText = "Valor ICMS";
+            c[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             TotalizaCupons();
         }

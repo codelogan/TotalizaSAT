@@ -10,13 +10,14 @@ namespace Totaliza
     public class DadosCupom
     {
         public  DadosCupom() { }
-        public DadosCupom(int _numero, DateTime _data, decimal _valor, string _id, string _chcanc)
+        public DadosCupom(int _numero, DateTime _data, decimal _valor, string _id, string _chcanc, decimal _valorICMS)
         {
             this.p_numero = _numero;
             this.p_data = _data;
             this.p_valor = _valor;
             this.p_id = _id;
             this.p_chcanc = _chcanc;
+            this.p_valorICMS = _valorICMS;
         }
 
         private int p_numero=0;
@@ -24,6 +25,7 @@ namespace Totaliza
         private decimal p_valor = 0;
         private string p_id = "";
         private string p_chcanc = "";
+        private decimal p_valorICMS = 0;
 
         public int Numero
         {
@@ -50,7 +52,11 @@ namespace Totaliza
             get { return p_chcanc; }
             set { p_chcanc = value; }
         }
-
+        public decimal ValorICMS
+        {
+            get { return p_valorICMS; }
+            set { p_valorICMS = value; }
+        }
         public static decimal SomaLista(List<DadosCupom> lista)
         {
             decimal total=0;
